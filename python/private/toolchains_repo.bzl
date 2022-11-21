@@ -91,7 +91,6 @@ load("@rules_python//python:versions.bzl", "PLATFORMS", "gen_python_config_setti
 load("defs.bzl", "platform_target")
 gen_python_config_settings()
 exports_files(["defs.bzl"])
-cc_library(name = "empty")
 alias(name = "files",           actual = platform_target(":files"))
 alias(name = "includes",        actual = platform_target(":includes"))
 alias(name = "libpython",       actual = platform_target(":libpython"))
@@ -122,7 +121,7 @@ interpreter = "@{py_repository}_{host_platform}//:{python3_binary_path}"
 
 def platform_target(name):
     options = {{":" + platform : "@{py_repository}_" + platform + "//" + name for platform in PLATFORMS.keys()}}
-    options["//conditions:default"] = ":empty"
+    options["//conditions:default"] = "@{py_repository}_{host_platform}//" + name
     return select(options)
 """.format(
         py_repository = rctx.attr.user_repository_name,
